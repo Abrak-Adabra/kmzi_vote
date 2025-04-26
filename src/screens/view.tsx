@@ -178,7 +178,6 @@ export default function ViewPage({ url }: { url: string }) {
                             })
                         )
                         let included = false
-                        console.log(signedArray, tmp)
                         for (const bulletin of signedArray) {
                             if (tmp.includes(bulletin)) included = true
                         }
@@ -195,6 +194,7 @@ export default function ViewPage({ url }: { url: string }) {
             })
         }
         if (status.stage == 'ended') Bulletin.get(url).then((result) => setResults(result.split('::')))
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [status])
 
     async function takePart() {
