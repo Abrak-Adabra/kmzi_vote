@@ -39,7 +39,7 @@ export default function ViewPage({ url }: { url: string }) {
     useEffect(() => {
         if (!url) return
         setError(null)
-        const sse = new EventSource(`http://${url}:5000/status`)
+        const sse = new EventSource(`https://${url}:5000/status`)
         sse.onmessage = (e) => {
             try {
                 setStatus((cur) => {

@@ -1,6 +1,6 @@
 export default class Bulletin {
     public static async post(ip: string, body: { id: string; data: string; signature: string }) {
-        const url = `http://${ip}:5000/bulletin`
+        const url = `https://${ip}:5000/bulletin`
         const response = await fetch(url, {
             method: 'POST',
             body: JSON.stringify(body),
@@ -8,7 +8,7 @@ export default class Bulletin {
         return (await response.ok) ? await response.text() : ((await response.json()) as { error: string }).error
     }
     public static async put(ip: string, body: { id: string; data: string; signature: string }) {
-        const url = `http://${ip}:5000/bulletin`
+        const url = `https://${ip}:5000/bulletin`
         const response = await fetch(url, {
             method: 'PUT',
             body: JSON.stringify(body),
@@ -16,7 +16,7 @@ export default class Bulletin {
         return (await response.ok) ? await response.text() : ((await response.json()) as { error: string }).error
     }
     public static async get(ip: string) {
-        const url = `http://${ip}:5000/bulletin`
+        const url = `https://${ip}:5000/bulletin`
         const response = await fetch(url, {
             method: 'GET',
         })

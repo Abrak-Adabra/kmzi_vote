@@ -1,6 +1,6 @@
 export default class Users {
     public static async add(ip: string, data: { pck: string; psk: string }) {
-        const url = `http://${ip}:5000/users/add`
+        const url = `https://${ip}:5000/users/add`
 
         const response = await fetch(url, {
             method: 'POST',
@@ -10,7 +10,7 @@ export default class Users {
     }
 
     public static async getPck(ip: string) {
-        const url = `http://${ip}:5000/users/pck`
+        const url = `https://${ip}:5000/users/pck`
         const response = await fetch(url, {
             method: 'GET',
         })
@@ -18,7 +18,7 @@ export default class Users {
     }
 
     public static async getPsk(ip: string, id: string) {
-        const url = `http://${ip}:5000/users/${id}/psk`
+        const url = `https://${ip}:5000/users/${id}/psk`
         const response = await fetch(url, {
             method: 'GET',
         })
