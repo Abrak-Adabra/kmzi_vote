@@ -336,7 +336,8 @@ export default function ViewPage({ url }: { url: string }) {
         }
     }
 
-    if (status?.stage == 'active' && currents && currents?.length > 1) {
+    if (status?.stage == 'active' && currents) {
+        if (currents.length == 1) setCurrent(currents[0])
         return (
             <Container style={{ display: 'flex', alignItems: 'center', flexDirection: 'column', height: '100%' }}>
                 <h1> Голосование</h1>
