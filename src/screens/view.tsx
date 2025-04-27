@@ -71,8 +71,8 @@ export default function ViewPage({ url }: { url: string }) {
         if (status?.stage == 'none') db.clear_keys()
         db.getCurrent().then((result) => setCurrents(result))
         if (status?.stage == 'active' || status?.stage == 'ended') getPoll()
+
         if (!status?.active) return
-        if (currents) setCurrent(currents[0])
         const currentServer = status?.active.split('/')[0]
         if (status.stage == 'decrypt') {
             if (currents?.includes(currentServer)) {
@@ -342,6 +342,7 @@ export default function ViewPage({ url }: { url: string }) {
                 <h1> Голосование</h1>
                 {currents?.length && currents.length > 1 ? (
                     <Form.Select onChange={(e) => setCurrent(e.target.value)} value={current || '0'}>
+                        <option value={'0'}>Выберите голосующего участника</option>
                         {currents?.map((id, index) => (
                             <option key={index} value={id}>
                                 Участник {id}
@@ -472,11 +473,11 @@ export default function ViewPage({ url }: { url: string }) {
                                 return acc
                             }, {}) || {}
                         ).map(([answer, count]) => (
-                            <div key={answer} style={{ display: 'flex', width: '100%' }}>
+                            <div key={answer} style={{ display: 'flex', width: '100%', flexDirection: 'column' }}>
+                                <h4>{answer}</h4>
                                 <ProgressBar
                                     now={(count / Number(poll.count)) * 100}
-                                    label={answer}
-                                    style={{ width: '100%', height: 40, fontSize: 30 }}
+                                    style={{ width: '100%', height: 20 }}
                                 />
                             </div>
                         ))}
