@@ -71,8 +71,8 @@ export default function ViewPage({ url }: { url: string }) {
         if (status?.stage == 'none') db.clear_keys()
         db.getCurrent().then((result) => setCurrents(result))
         if (status?.stage == 'active' || status?.stage == 'ended') getPoll()
-
         if (!status?.active) return
+        if (currents) setCurrent(currents[0])
         const currentServer = status?.active.split('/')[0]
         if (status.stage == 'decrypt') {
             if (currents?.includes(currentServer)) {
@@ -337,13 +337,11 @@ export default function ViewPage({ url }: { url: string }) {
     }
 
     if (status?.stage == 'active' && currents) {
-        if (currents.length == 1) setCurrent(currents[0])
         return (
             <Container style={{ display: 'flex', alignItems: 'center', flexDirection: 'column', height: '100%' }}>
                 <h1> Голосование</h1>
                 {currents?.length && currents.length > 1 ? (
                     <Form.Select onChange={(e) => setCurrent(e.target.value)} value={current || '0'}>
-                        <option value={'0'}>Выберите голосующего участника</option>
                         {currents?.map((id, index) => (
                             <option key={index} value={id}>
                                 Участник {id}
