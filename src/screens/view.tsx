@@ -1,5 +1,6 @@
 import Wrapper from '@/helpers/wrapper'
 import Bulletin from '@/services/bulletin'
+import Error from '@/services/error'
 import Poll from '@/services/poll'
 import Users from '@/services/users'
 import { decrypt, encrypt, exportCryptKey, generateCryptKeyPair } from '@/utils/cryptKeys'
@@ -100,7 +101,11 @@ export default function ViewPage({ url }: { url: string }) {
                     const bulletinsToSend = shuffleArray(bulletins).join('::')
                     const signature = await sign(await db.getPrivateKey(currentServer, 'sign'), bulletinsToSend)
                     if (included) Bulletin.put(url, { id: currentServer, data: bulletinsToSend, signature: signature })
-                    else alert(`нет бюллетеня ${currentServer}`)
+                    else {
+                        const errorData = `нет бюллетеня ${currentServer}`
+                        const errorSignature = await sign(await db.getPrivateKey(currentServer, 'sign'), errorData)
+                        Error.post(url, { data: errorData, signature: errorSignature })
+                    }
                 })
             }
         }
@@ -125,7 +130,7 @@ export default function ViewPage({ url }: { url: string }) {
                                         parsedSignature,
                                         parsedData
                                     )
-                                    if (!isValid) throw 'Ошибка при проверке подписи'
+                                    if (!isValid) throw `Ошибка при проверке подписи ${currentServer}`
                                     bulletin = parsedData
                                 }
                                 const decrypted = await decrypt(privateCryptKey, bulletin)
@@ -153,7 +158,9 @@ export default function ViewPage({ url }: { url: string }) {
                             Bulletin.put(url, { id: currentServer, data: bulletinsToSend, signature: signature })
                         else throw `нет бюллетеня ${currentServer}`
                     } catch (e) {
-                        alert(e)
+                        const errorData = e as string
+                        const errorSignature = await sign(await db.getPrivateKey(currentServer, 'sign'), errorData)
+                        Error.post(url, { data: errorData, signature: errorSignature })
                     }
                 } else if (currents?.includes(String(Number(currentServer) % Number(status.active.split('/')[1])))) {
                     const signedArray = [] as string[]
@@ -188,7 +195,9 @@ export default function ViewPage({ url }: { url: string }) {
                             Bulletin.put(url, { id: currentServer, data: bulletinsToSend, signature: signature })
                         else throw `нет бюллетеня 1`
                     } catch (e) {
-                        alert(e)
+                        const errorData = e as string
+                        const errorSignature = await sign(await db.getPrivateKey(currentServer, 'sign'), errorData)
+                        Error.post(url, { data: errorData, signature: errorSignature })
                     }
                 }
             })
@@ -339,7 +348,7 @@ export default function ViewPage({ url }: { url: string }) {
     if (status?.stage == 'active' && currents) {
         return (
             <Container style={{ display: 'flex', alignItems: 'center', flexDirection: 'column', height: '100%' }}>
-                <h1> Голосование</h1>
+                <h1>Голосование</h1>
                 <Form.Select onChange={(e) => setCurrent(e.target.value)} value={current || '0'}>
                     <option value={'0'}>Выберите голосующего участника</option>
                     {currents?.map((id, index) => (
