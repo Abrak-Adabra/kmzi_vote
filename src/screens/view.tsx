@@ -340,18 +340,14 @@ export default function ViewPage({ url }: { url: string }) {
         return (
             <Container style={{ display: 'flex', alignItems: 'center', flexDirection: 'column', height: '100%' }}>
                 <h1> Голосование</h1>
-                {currents?.length && currents.length > 1 ? (
-                    <Form.Select onChange={(e) => setCurrent(e.target.value)} value={current || '0'}>
-                        <option value={'0'}>Выберите голосующего участника</option>
-                        {currents?.map((id, index) => (
-                            <option key={index} value={id}>
-                                Участник {id}
-                            </option>
-                        ))}
-                    </Form.Select>
-                ) : (
-                    `Участник ${current}`
-                )}
+                <Form.Select onChange={(e) => setCurrent(e.target.value)} value={current || '0'}>
+                    <option value={'0'}>Выберите голосующего участника</option>
+                    {currents?.map((id, index) => (
+                        <option key={index} value={id}>
+                            Участник {id}
+                        </option>
+                    ))}
+                </Form.Select>
                 <Wrapper>
                     {(isLoadingPoll || Number(current) == 0 || !current) && (
                         <Wrapper>
